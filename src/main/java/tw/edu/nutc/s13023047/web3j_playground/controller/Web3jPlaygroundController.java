@@ -30,7 +30,7 @@ public class Web3jPlaygroundController {
 		return "Hello World! " + mWeb3Playground.getAccount();
 	}
 
-	@RequestMapping("/web3/clientversion")
+	@RequestMapping(path="/web3/clientversion", produces = "text/plain")
 	public String version() {
 		try {
 			return mWeb3Playground.getClientVersion();
@@ -39,7 +39,7 @@ public class Web3jPlaygroundController {
 		}
 	}
 
-	@RequestMapping("/web3/balance")
+	@RequestMapping(path="/web3/balance", produces = "text/plain")
 	public String balance() {
 		try {
 			return String.format("%s has %s wei", mWeb3Playground.getAccount(), mWeb3Playground.getBalance());
@@ -48,7 +48,7 @@ public class Web3jPlaygroundController {
 		}
 	}
 
-	@RequestMapping("/web3/sendFunds")
+	@RequestMapping(path="/web3/sendFunds",  produces = "text/plain")
 	public String sendFunds() {
 		String account = "0x42d37Cb430f4A0fFe06DeDeD30Ab688ef3D2d180";
 		BigDecimal amount = BigDecimal.valueOf(10);
@@ -60,11 +60,10 @@ public class Web3jPlaygroundController {
 			return e.getMessage();
 		}
 
-		return String.format("Funds transfered: \nBlock Number: %s\nTransaction Hash:%s", result.getBlockNumber(),
-				result.getTransactionHash());
+		return formatTransactionReceipt("Funds transfered", result);
 	}
 
-	@RequestMapping("/web3/sendToken")
+	@RequestMapping(path="/web3/sendToken", produces = "text/plain")
 	public String sendToken() {
 		String account = "0x42d37Cb430f4A0fFe06DeDeD30Ab688ef3D2d180";
 		BigInteger amount = BigInteger.valueOf(10);
@@ -76,7 +75,11 @@ public class Web3jPlaygroundController {
 			return e.getMessage();
 		}
 
-		return String.format("Token transfered: \nBlock Number: %s\nTransaction Hash:%s", result.getBlockNumber(),
-				result.getTransactionHash());
+		return formatTransactionReceipt("Token transfered", result);
+	}
+
+	protected String formatTransactionReceipt(String title, TransactionReceipt transactionReceipt) {
+		return String.format("%s: \nBlock Number: %s\nTransaction Hash:%s", title, transactionReceipt.getBlockNumber(),
+				transactionReceipt.getTransactionHash());
 	}
 }

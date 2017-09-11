@@ -62,7 +62,7 @@ public class Web3jPlayground {
 
 	public TransactionReceipt sendFunds(String account, BigDecimal decimal)
 			throws IOException, CipherException, InterruptedException, TransactionTimeoutException {
-		Credentials credentials = WalletUtils.loadCredentials(mPassword, mCredentialFilePath);
+		Credentials credentials = getCredentials();
 		TransactionReceipt result = Transfer.sendFunds(mWeb3, credentials, account, decimal, Convert.Unit.ETHER);
 		return result;
 	}
